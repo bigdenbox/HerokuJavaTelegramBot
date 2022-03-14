@@ -1,4 +1,4 @@
-package com.senderman.examplebot;
+package com.bigdenbox.herokuboxbot;
 
 import com.annimon.tgbotsmodule.BotHandler;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

@@ -1,4 +1,4 @@
-package com.senderman.examplebot;
+package com.bigdenbox.herokuboxbot;
 
 import com.annimon.tgbotsmodule.BotHandler;
 import com.annimon.tgbotsmodule.BotModule;
