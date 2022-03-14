@@ -35,8 +35,10 @@ public class ExampleBotHandler extends BotHandler {
         long chatId = message.getChatId();
 
         SendMessage sm = new SendMessage(chatId, text);
+        SendMessage sm2 = new SendMessage(chatId, Long.toString(chatId));
         try {
-            execute(sm);
+            execute(sm);  // Send text echo
+            execute(sm2); // Send ChatId 
         } catch (TelegramApiException e) {
             BotLogger.error("SEND", e.toString());
         }
