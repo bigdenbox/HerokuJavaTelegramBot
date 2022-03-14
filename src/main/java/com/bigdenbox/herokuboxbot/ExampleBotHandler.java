@@ -12,12 +12,14 @@ public class ExampleBotHandler extends BotHandler {
 
     @Override
     public String getBotUsername() {
-        return System.getenv("username");
+ //       return System.getenv("username");				// Heroku
+    	return "ExampleTelegramBoxBot";	// without heroku
     }
 
     @Override
     public String getBotToken() {
-        return System.getenv("token");
+ //       return System.getenv("token");  // Heroku
+        return "5089646150:AAFgK7RlFlkhVASF9M_NiP2mhn9iRhr92JM"; // without heroku
     }
 
     @Override
