@@ -1,6 +1,9 @@
 package com.bigdenbox.herokuboxbot;
 
 import com.annimon.tgbotsmodule.BotHandler;
+
+import java.io.IOException;
+
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -24,6 +27,9 @@ public class ExampleBotHandler extends BotHandler {
 
 	@Override
 	public BotApiMethod onUpdate(Update update) {
+		String stringUrl = "https://www.olx.ua/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/ivano-frankovsk/";
+		String concatStringWithUrl = "";
+
 		if (!update.hasMessage()) {
 			return null;
 		}
@@ -35,17 +41,55 @@ public class ExampleBotHandler extends BotHandler {
 
 		String text = message.getText();
 		long chatId = message.getChatId();
-//		String stringChatId = Long.toString(chatId);
-		String textSendMessage = "chatId = " + chatId + "; text = " + text;
-
+		String textSendMessage = "chatId = " + chatId + "; text = " + text + "\n";
 		SendMessage sm = new SendMessage(chatId, textSendMessage);
-		System.out.println(textSendMessage);
-
 		try {
-			execute(sm); 
+			execute(sm);
 		} catch (TelegramApiException e) {
 			BotLogger.error("SEND", e.toString());
 		}
+		System.out.println(textSendMessage);
+
+		try {
+			JsoupParsing jsoupParsing = new JsoupParsing(stringUrl);
+			jsoupParsing.parseUrlsFromUrl();
+			concatStringWithUrl = jsoupParsing.arrayUrlsToString();
+			for (String s : jsoupParsing.arrayUrls) {
+				SendMessage sm1 = new SendMessage(chatId, s);
+				try {
+					execute(sm1);
+				} catch (TelegramApiException e) {
+					BotLogger.error("SEND", e.toString());
+				}
+				System.out.println(s);
+			}
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+
+//		textSendMessage = textSendMessage.concat(concatStringWithUrl);
+
+//		System.out.println(concatStringWithUrl); // print URLs to console
+
+		/*
+		 * // print urls to console try { printTextFromParsing(stringUrl); } catch
+		 * (IOException e1) { e1.printStackTrace(); }
+		 */
+
 		return null;
 	}
+
+	/*
+	 * public void printTextFromParsing(String stringUrl) throws IOException {
+	 * JsoupParsing jsoupParsing = new JsoupParsing(stringUrl);
+	 * jsoupParsing.parseUrlsFromUrl(); System.out.println("++++++++++++++++++++");
+	 * for (int i = 0; i < jsoupParsing.arrayUrls.length; i++) {
+	 * System.out.println(jsoupParsing.arrayUrls[i]); }
+	 * System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+	 * jsoupParsing.printArrayUrls();
+	 * System.out.println("*******************************");
+	 * System.out.println(jsoupParsing.arrayUrlsToString());
+	 * 
+	 * }
+	 */
 }
