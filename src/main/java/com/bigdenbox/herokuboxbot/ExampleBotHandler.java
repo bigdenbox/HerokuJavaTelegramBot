@@ -3,6 +3,8 @@ package com.bigdenbox.herokuboxbot;
 import com.annimon.tgbotsmodule.BotHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,8 +29,12 @@ public class ExampleBotHandler extends BotHandler {
 
 	@Override
 	public BotApiMethod onUpdate(Update update) {
-		String stringUrl = "https://www.olx.ua/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/ivano-frankovsk/";
-		String concatStringWithUrl = "";
+		
+		
+		// HashMap with clients. Key is s ChatID
+		HashMap<Long, Client> clients = new HashMap<Long, Client>();
+
+//		String stringUrl = "https://www.olx.ua/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/ivano-frankovsk/";
 
 		if (!update.hasMessage()) {
 			return null;
@@ -42,8 +48,16 @@ public class ExampleBotHandler extends BotHandler {
 		String text = message.getText();
 		long chatId = message.getChatId();
 		
-		// Send ChatId and text echo
+		// add client
+		if (!clients.containsKey(message.getChatId())){
+			clients.put(message.getChatId(), new Client(message.getChatId()));
+		}
 		
+		//switch region for this client
+		clients.get(message.getChatId()).switchRegion(Region.VIN);   // HardCode
+
+		// Send ChatId and text echo
+
 		String textSendMessage = "chatId = " + chatId + "; text = " + text + "\n";
 		SendMessage sm = new SendMessage(chatId, textSendMessage);
 		try {
@@ -52,13 +66,50 @@ public class ExampleBotHandler extends BotHandler {
 			BotLogger.error("SEND", e.toString());
 		}
 		System.out.println(textSendMessage);
-
 		
 		// Send URLs
 		try {
-			JsoupParsing jsoupParsing = new JsoupParsing(stringUrl);
-			jsoupParsing.parseUrlsFromUrl();                              // Do arrayUrls
+//			UrlPerUpToDateConteiner urlPerUpToDateConteiner = new UrlPerUpToDateConteiner();
+	//		urlPerUpToDateConteiner.setNewOldUrlHashMap("New", null);
 			
+//			Region region = Region.VOL;
+//			HashMap<Region, UrlPerUpToDateConteiner> hashMap = new HashMap<Region, UrlPerUpToDateConteiner>();
+//			hashMap.put(region, urlPerUpToDateConteiner);
+//			UrlPerRegionConteiner urlPerRegionConteiner = new UrlPerRegionConteiner();
+//			urlPerRegionConteiner.setRegionUrlHashMap(regionUrlHashMap);
+//			urlPerRegionConteiner.switchRegion(region);
+			
+	//		System.out.println("urlPerRegionConteiner.toString() = " + urlPerRegionConteiner.toString());
+			
+//			System.out.println("region.getOutputUrl() = " + region.getOutputUrl());
+	//		System.out.println("region.getTitle() = " + region.getTitle());
+		//	System.out.println("region.toString() = " + region.toString());
+
+	//		JsoupParsing jsoupParsing = new JsoupParsing(region.getOutputUrl());
+
+
+	//		String stringUpToDate[] = {"New", "Old", "Active" };
+	//		HashMap<String, String[]> newOldUrlHashMap = new HashMap<String, String[]>();
+	//		newOldUrlHashMap.put(stringUpToDate[0], jsoupParsing.arrayUrls);
+
+			
+			
+	//		HashMap<region, V>
+	//		UrlPerRegionConteiner perRegionConteiner = new UrlPerRegionConteiner();
+			
+			//UrlPerUpToDateConteiner("New", stringTemp);
+			// HashMap<Region, UrlPerRegionConteiner> hashMap = new HashMap();
+
+//			UrlPerRegionConteiner urlPerRegionConteiner = new UrlPerRegionConteiner();
+
+//			System.out.println("stringUrl = " + region.outputUrl);
+	//		String stringUrl = region.getOutputUrl();
+	//		System.out.println("Titel = " + region.getTitle());
+			
+			// get Link to parse
+			JsoupParsing jsoupParsing = new JsoupParsing(clients.get(message.getChatId()).region.getOutputUrl());
+			jsoupParsing.parseUrlsFromUrl(); // Do arrayUrls
+
 			for (String s : jsoupParsing.arrayUrls) {
 				SendMessage sm1 = new SendMessage(chatId, s);
 				try {
@@ -75,17 +126,4 @@ public class ExampleBotHandler extends BotHandler {
 		return null;
 	}
 
-	/*
-	 * public void printTextFromParsing(String stringUrl) throws IOException {
-	 * JsoupParsing jsoupParsing = new JsoupParsing(stringUrl);
-	 * jsoupParsing.parseUrlsFromUrl(); System.out.println("++++++++++++++++++++");
-	 * for (int i = 0; i < jsoupParsing.arrayUrls.length; i++) {
-	 * System.out.println(jsoupParsing.arrayUrls[i]); }
-	 * System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
-	 * jsoupParsing.printArrayUrls();
-	 * System.out.println("*******************************");
-	 * System.out.println(jsoupParsing.arrayUrlsToString());
-	 * 
-	 * }
-	 */
 }
