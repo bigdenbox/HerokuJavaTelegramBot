@@ -41,6 +41,9 @@ public class ExampleBotHandler extends BotHandler {
 
 		String text = message.getText();
 		long chatId = message.getChatId();
+		
+		// Send ChatId and text echo
+		
 		String textSendMessage = "chatId = " + chatId + "; text = " + text + "\n";
 		SendMessage sm = new SendMessage(chatId, textSendMessage);
 		try {
@@ -50,10 +53,12 @@ public class ExampleBotHandler extends BotHandler {
 		}
 		System.out.println(textSendMessage);
 
+		
+		// Send URLs
 		try {
 			JsoupParsing jsoupParsing = new JsoupParsing(stringUrl);
-			jsoupParsing.parseUrlsFromUrl();
-			concatStringWithUrl = jsoupParsing.arrayUrlsToString();
+			jsoupParsing.parseUrlsFromUrl();                              // Do arrayUrls
+			
 			for (String s : jsoupParsing.arrayUrls) {
 				SendMessage sm1 = new SendMessage(chatId, s);
 				try {
@@ -66,15 +71,6 @@ public class ExampleBotHandler extends BotHandler {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-
-//		textSendMessage = textSendMessage.concat(concatStringWithUrl);
-
-//		System.out.println(concatStringWithUrl); // print URLs to console
-
-		/*
-		 * // print urls to console try { printTextFromParsing(stringUrl); } catch
-		 * (IOException e1) { e1.printStackTrace(); }
-		 */
 
 		return null;
 	}

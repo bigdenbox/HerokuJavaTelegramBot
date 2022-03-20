@@ -19,6 +19,7 @@ public class JsoupParsing {
 	Document doc;
 	Elements urls;
 	String[] arrayUrls;
+	String[] newArrayUrls;
 
 	public JsoupParsing(String url) throws IOException {
 
